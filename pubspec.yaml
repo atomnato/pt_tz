@@ -47,7 +47,17 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-
+  fonts:
+    - family: SanFrancisco
+      fonts:
+        - asset: assets/fonts/SFUIDisplay-Light.ttf
+          weight: 300
+        - asset: assets/fonts/SFUIDisplay-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SFUIDisplay-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/SFUIDisplay-Semibold.ttf
+          weight: 600
 
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false

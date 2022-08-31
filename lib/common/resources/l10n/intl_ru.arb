@@ -1,1 +1,10 @@
-{}
+{
+  "@@locale": "ru",
+  "authorization": "Авторизация",
+  "mail": "Почта",
+  "password": "Пароль",
+  "forgotPassword": "Забыли пароль ?",
+  "signIn": "Войти",
+  "registration": "Зарегистрироваться",
+  "questionReg": "У вас нет аккаунта? "
+}
