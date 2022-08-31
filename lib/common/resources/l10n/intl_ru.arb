@@ -6,5 +6,11 @@
   "forgotPassword": "Забыли пароль ?",
   "signIn": "Войти",
   "registration": "Зарегистрироваться",
-  "questionReg": "У вас нет аккаунта? "
+  "questionReg": "У вас нет аккаунта? ",
+  "enterMail": "Укажите почту",
+  "enterPassword": "Укажите пароль",
+  "continueReq": "Продолжить",
+  "newPassword": "Новый пароль",
+  "replyPassword": "Повторите пароль"
+
 }

@@ -4,6 +4,7 @@ import 'package:pt_tz/common/resources/l10n/generated/l10n.dart';
 import 'package:pt_tz/common/resources/utils/app_color.dart';
 import 'package:pt_tz/common/resources/widgets/app_style.dart';
 import 'package:pt_tz/features/app/presentation/widgets/input_field.dart';
+import 'package:pt_tz/features/registration/presentation/page/registration_wrap.dart';
 import 'package:pt_tz/features/utils/widgets/main_button.dart';
 
 class AuthPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _AuthPageState extends State<AuthPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: ListView(
               shrinkWrap: true,
               children: [
@@ -71,22 +72,25 @@ class _AuthPageState extends State<AuthPage> {
                 SizedBox(
                   height: 16.h,
                 ),
-                Align(
-                  child: RichText(
-                    text: TextSpan(
-                      text: locales.questionReg,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      locales.questionReg,
                       style: styles.regularSubHeadline
                           .copyWith(color: kSecondTextColor),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: locales.registration,
-                          style: styles.semiBoldSubHeadline
-                              .copyWith(color: kPrimaryColor),
-                        ),
-                      ],
                     ),
-                  ),
-                ),
+                    TextButton(
+                      onPressed: () =>
+                          Navigator.of(context).push(RegistrationWrap.route()),
+                      child: Text(
+                        locales.registration,
+                        style: styles.semiBoldSubHeadline
+                            .copyWith(color: kPrimaryColor),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
