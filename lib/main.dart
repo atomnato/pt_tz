@@ -1,13 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:pt_tz/common/resources/l10n/generated/l10n.dart';
 import 'package:pt_tz/common/resources/widgets/app_style.dart';
+import 'package:pt_tz/features/app/domain/launcher_bloc.dart';
 import 'package:pt_tz/features/app/presentation/pages/app_page.dart';
-import 'package:pt_tz/features/auth/presentation/page/auth_page.dart';
+import 'package:pt_tz/features/auth/domain/auth_bloc.dart';
+import 'package:pt_tz/features/auth/presentation/pages/auth_page.dart';
+import 'package:pt_tz/firebase_options.dart';
 
-void main() {
-  runApp(const AppStyles(child: Application()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+    AppStyles(
+      child: MultiProvider(
+        providers: [
+          Provider(
+            create: (BuildContext context) => FirebaseAuth.instance,
+          ),
+          BlocProvider(create: (_) => LauncherBloc()),
+          ProxyProvider<FirebaseAuth, AuthBloc>(
+            update: (_, auth, bloc) => AuthBloc(auth),
+            lazy: true,
+          ),
+        ],
+        child: const Application(),
+      ),
+    ),
+  );
 }
 
 class Application extends StatelessWidget {

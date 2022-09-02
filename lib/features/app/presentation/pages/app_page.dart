@@ -1,10 +1,42 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:async';
 
-class AppPage extends StatelessWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pt_tz/features/app/domain/launcher_bloc.dart';
+import 'package:pt_tz/features/auth/presentation/pages/auth_page.dart';
+
+class AppPage extends StatefulWidget {
   final Widget child;
 
   const AppPage({required this.child, super.key});
+
+  @override
+  State<AppPage> createState() => _AppPageState();
+}
+
+class _AppPageState extends State<AppPage> {
+  late final FirebaseAuth auth;
+  late final LauncherBloc bloc;
+  late final StreamSubscription subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    bloc = context.read<LauncherBloc>();
+    auth = context.read<FirebaseAuth>();
+    subscription = auth.authStateChanges().listen((User? user) {
+      bloc.add(LauncherEvent.login(user: user));
+    });
+    bloc.add(LauncherEvent.login(user: auth.currentUser));
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +45,18 @@ class AppPage extends StatelessWidget {
       designSize: const Size(375, 667),
       minTextAdapt: true,
     );
-    return child;
+    return BlocBuilder<LauncherBloc, LauncherState>(
+      builder: (context, state) {
+        if (state is PendingAuthenticateLauncherState) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (state is SuccessAuthenticateLauncherState) {
+          return Container();
+        }
+        return const AuthPage();
+      },
+    );
   }
 }

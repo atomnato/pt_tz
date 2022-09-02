@@ -11,6 +11,6 @@
   "enterPassword": "Укажите пароль",
   "continueReq": "Продолжить",
   "newPassword": "Новый пароль",
-  "replyPassword": "Повторите пароль"
-
+  "replyPassword": "Повторите пароль",
+  "welcomeMessage": "Вы успешщно авторизовались"
 }

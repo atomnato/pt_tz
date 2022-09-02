@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pt_tz/common/resources/l10n/generated/l10n.dart';
 import 'package:pt_tz/common/resources/widgets/adaptive_route.dart';
 import 'package:pt_tz/common/resources/widgets/app_style.dart';
-import 'package:pt_tz/features/app/presentation/widgets/input_field.dart';
 import 'package:pt_tz/features/registration/presentation/page/password_page.dart';
+import 'package:pt_tz/features/utils/widgets/input_field.dart';
 import 'package:pt_tz/features/utils/widgets/main_button.dart';
 
 class LoginPage extends StatelessWidget {
