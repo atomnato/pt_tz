@@ -32,6 +32,13 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   @override
+  void dispose() {
+    loginController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final locales = Locales.of(context);
     final styles = AppStyles.of(context);
@@ -41,7 +48,7 @@ class _AuthPageState extends State<AuthPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: BlocListener<AuthBloc,AuthState>(
+            child: BlocListener<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is FailureLoginWithEmailAuthState) {
                   _showBottomModel(state.failure.getMessage);

@@ -10,6 +10,7 @@ import 'package:pt_tz/features/app/domain/launcher_bloc.dart';
 import 'package:pt_tz/features/app/presentation/pages/app_page.dart';
 import 'package:pt_tz/features/auth/domain/auth_bloc.dart';
 import 'package:pt_tz/features/auth/presentation/pages/auth_page.dart';
+import 'package:pt_tz/features/registration/domain/registration_bloc.dart';
 import 'package:pt_tz/firebase_options.dart';
 
 void main() async {
@@ -28,6 +29,10 @@ void main() async {
           BlocProvider(create: (_) => LauncherBloc()),
           ProxyProvider<FirebaseAuth, AuthBloc>(
             update: (_, auth, bloc) => AuthBloc(auth),
+            lazy: true,
+          ),
+          ProxyProvider<FirebaseAuth, RegistrationBloc>(
+            update: (_, auth, bloc) => RegistrationBloc(auth),
             lazy: true,
           ),
         ],
