@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pt_tz/common/resources/widgets/errors/error_mapper.dart';
+import 'package:pt_tz/common/resources/widgets/errors/error_type.dart';
 import 'package:pt_tz/common/resources/widgets/errors/failure_model.dart';
 import 'package:pt_tz/features/registration/domain/models/registration_bundle.dart';
-import 'package:pt_tz/features/registration/domain/registration_bloc.dart';
 import 'package:pt_tz/features/registration/domain/registration_states.dart';
 
 part 'registration_bloc.freezed.dart';
@@ -57,8 +57,9 @@ class RegistrationState with _$RegistrationState {
 
   @Implements<SetPassRegistrationState>()
   @Implements<FailureRegistrationState>()
-  const factory RegistrationState.setPassFailure() =
-      FailureSetPassRegistrationState;
+  const factory RegistrationState.setPassFailure({
+    required Failure failure,
+  }) = FailureSetPassRegistrationState;
 
   @Implements<CreateUserRegistrationState>()
   @Implements<PendingRegistrationState>()
@@ -97,8 +98,23 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     Emitter<RegistrationState> emit,
   ) async {
     emit(const RegistrationState.setEmailPending());
-    _bundle.email = event.email;
-    emit(const RegistrationState.setEmailSuccess());
+
+    try {
+      final methods = await _auth.fetchSignInMethodsForEmail(event.email);
+      if (methods.isNotEmpty) {
+        final failure = AuthFailure(
+          type: AuthErrorType.invalidEmail,
+          message: '',
+        );
+        emit(RegistrationState.setEmailFailure(failure: failure));
+      } else {
+        _bundle.email = event.email;
+        emit(const RegistrationState.setEmailSuccess());
+      }
+    } on Exception catch (e) {
+      final failure = ErrorMapper.map(e);
+      emit(RegistrationState.setEmailFailure(failure: failure));
+    }
   }
 
   Future<void> _setPass(
@@ -106,11 +122,15 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     Emitter<RegistrationState> emit,
   ) async {
     emit(const RegistrationState.setPassPending());
-    if (event.pass == event.confirmPass) {
+    if (event.pass == event.confirmPass && event.pass.length > 6) {
       _bundle.pass = event.pass;
       emit(const RegistrationState.setPassSuccess());
     } else {
-      emit(const RegistrationState.setPassFailure());
+      final failure = AuthFailure(
+        type: AuthErrorType.invalidConfirmPassword,
+        message: '',
+      );
+      emit(RegistrationState.setPassFailure(failure: failure));
     }
   }
 
@@ -119,7 +139,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     Emitter<RegistrationState> emit,
   ) async {
     emit(const RegistrationState.createUserPending());
-
     try {
       await _auth.createUserWithEmailAndPassword(
         email: _bundle.email!,

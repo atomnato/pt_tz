@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pt_tz/features/app/domain/launcher_bloc.dart';
 import 'package:pt_tz/features/auth/presentation/pages/auth_page.dart';
+import 'package:pt_tz/features/home/presentation/pages/home_page.dart';
 
 class AppPage extends StatefulWidget {
   final Widget child;
@@ -27,9 +28,11 @@ class _AppPageState extends State<AppPage> {
     bloc = context.read<LauncherBloc>();
     auth = context.read<FirebaseAuth>();
     subscription = auth.authStateChanges().listen((User? user) {
-      bloc.add(LauncherEvent.login(user: user));
+      if(user != null){
+        bloc.add(LauncherEvent.singIn(user: user));
+      }
     });
-    bloc.add(LauncherEvent.login(user: auth.currentUser));
+    bloc.add(LauncherEvent.singIn(user: auth.currentUser));
   }
 
   @override
@@ -45,18 +48,25 @@ class _AppPageState extends State<AppPage> {
       designSize: const Size(375, 667),
       minTextAdapt: true,
     );
-    return BlocBuilder<LauncherBloc, LauncherState>(
-      builder: (context, state) {
-        if (state is PendingAuthenticateLauncherState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (state is SuccessAuthenticateLauncherState) {
-          return Container();
-        }
-        return const AuthPage();
-      },
+    return Scaffold(
+      body: SafeArea(
+        child: BlocBuilder<LauncherBloc, LauncherState>(
+          builder: (context, state) {
+            if (state is PendingAuthenticateLauncherState) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is SuccessAuthenticateLauncherState) {
+              return const HomePage();
+            }
+            if(state is SuccessLogoutLauncherState){
+              return const AuthPage();
+            }
+            return const AuthPage();
+          },
+        ),
+      ),
     );
   }
 }

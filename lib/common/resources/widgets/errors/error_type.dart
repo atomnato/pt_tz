@@ -1,6 +1,8 @@
 enum AuthErrorType{
   unknownEmail,
   invalidPassword,
+  invalidEmail,
+  invalidConfirmPassword,
   unknownError
 }
 

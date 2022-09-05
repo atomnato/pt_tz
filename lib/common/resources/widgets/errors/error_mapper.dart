@@ -14,6 +14,9 @@ class ErrorMapper {
         case 'wrong-password':
           errorAuthType = AuthErrorType.invalidPassword;
           break;
+        case 'invalid-email':
+          errorAuthType = AuthErrorType.invalidEmail;
+          break;
       }
       return AuthFailure(
         type: errorAuthType,

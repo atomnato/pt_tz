@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pt_tz/common/resources/assets/resources.dart';
 import 'package:pt_tz/common/resources/widgets/app_style.dart';
-import 'package:pt_tz/resources/resources.dart';
 
 class AuthBottomSheet extends StatelessWidget {
   const AuthBottomSheet({required this.title, super.key});

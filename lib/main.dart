@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:pt_tz/common/resources/l10n/generated/l10n.dart';
@@ -26,7 +25,10 @@ void main() async {
           Provider(
             create: (BuildContext context) => FirebaseAuth.instance,
           ),
-          BlocProvider(create: (_) => LauncherBloc()),
+          ProxyProvider<FirebaseAuth, LauncherBloc>(
+            update: (_, auth, bloc) => LauncherBloc(auth),
+            lazy: true,
+          ),
           ProxyProvider<FirebaseAuth, AuthBloc>(
             update: (_, auth, bloc) => AuthBloc(auth),
             lazy: true,
@@ -50,6 +52,7 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       supportedLocales: Locales.delegate.supportedLocales,
+      debugShowCheckedModeBanner: false,
       theme: _theme,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

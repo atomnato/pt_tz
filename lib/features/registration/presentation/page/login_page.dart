@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pt_tz/common/resources/l10n/generated/l10n.dart';
 import 'package:pt_tz/common/resources/widgets/adaptive_route.dart';
 import 'package:pt_tz/common/resources/widgets/app_style.dart';
+import 'package:pt_tz/common/resources/widgets/insert_separator.dart';
 import 'package:pt_tz/features/registration/domain/registration_bloc.dart';
 import 'package:pt_tz/features/registration/presentation/page/password_page.dart';
 import 'package:pt_tz/features/utils/widgets/input_field.dart';
@@ -69,12 +70,12 @@ class _LoginPageState extends State<LoginPage> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  SizedBox(height: 64.h),
+                  SizedBox(height: 56.h),
                   Text(
                     locales.enterMail,
                     style: styles.semiBoldHeadline,
                   ),
-                  SizedBox(height: 32.h),
+                  SizedBox(height: 16.h),
                   InputField(
                     emailController,
                     hintText: locales.mail,
@@ -88,7 +89,9 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                   ),
-                ],
+                ].insertSeparator(
+                      SizedBox(height: 8.h),
+                    ).toList(),
               ),
             ),
           ),

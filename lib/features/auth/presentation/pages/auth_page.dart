@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pt_tz/common/resources/l10n/generated/l10n.dart';
 import 'package:pt_tz/common/resources/utils/app_color.dart';
 import 'package:pt_tz/common/resources/widgets/app_style.dart';
+import 'package:pt_tz/common/resources/widgets/insert_separator.dart';
 import 'package:pt_tz/features/auth/domain/auth_bloc.dart';
 import 'package:pt_tz/features/auth/presentation/widgets/auth_bottom_sheet.dart';
-import 'package:pt_tz/features/home/presentation/pages/home_page.dart';
 import 'package:pt_tz/features/registration/presentation/page/registration_wrap.dart';
 import 'package:pt_tz/features/utils/widgets/input_field.dart';
 import 'package:pt_tz/features/utils/widgets/main_button.dart';
@@ -25,10 +25,10 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void initState() {
+    super.initState();
     loginController = TextEditingController();
     passController = TextEditingController();
     bloc = context.read<AuthBloc>();
-    super.initState();
   }
 
   @override
@@ -52,32 +52,39 @@ class _AuthPageState extends State<AuthPage> {
               listener: (context, state) {
                 if (state is FailureLoginWithEmailAuthState) {
                   _showBottomModel(state.failure.getMessage);
-                } else if (state is SuccessLoginWithEmailAuthState) {
-                  Navigator.of(context).pushReplacement(HomePage.route());
                 }
               },
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  SizedBox(height: 130.h),
+                  SizedBox(height: 100.h),
                   Text(locales.authorization, style: styles.semiBoldHeadline),
-                  SizedBox(height: 16.h),
+                  SizedBox(
+                    height: 50.h,
+                  ),
                   InputField(
                     loginController,
                     hintText: locales.mail,
                   ),
-                  SizedBox(height: 8.h),
-                  InputField(
-                    passController,
-                    obscureText: true,
-                    hintText: locales.password,
-                    suffixWidget: Text(
-                      locales.forgotPassword,
-                      style:
-                          styles.semiBoldCaption.copyWith(color: kPrimaryColor),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      InputField(
+                        passController,
+                        obscureText: true,
+                        hintText: locales.password,
+                      ),
+                      SizedBox(
+                        height: 8.h,
+                      ),
+                      Text(
+                        locales.forgotPassword,
+                        style: styles.semiBoldCaption
+                            .copyWith(color: kPrimaryColor),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 200.h),
+                  SizedBox(height: 100.h),
                   MainButton(
                     locales.signIn,
                     onPressed: () => bloc.add(
@@ -87,7 +94,6 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -107,7 +113,13 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ],
                   )
-                ],
+                ]
+                    .insertSeparator(
+                      SizedBox(
+                        height: 8.h,
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ),

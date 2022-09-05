@@ -4,6 +4,6 @@ abstract class SuccessLauncherState {}
 
 abstract class FailureLauncherState {}
 
-abstract class LoginLauncherState {}
-abstract class LogoutLauncherState {}
+abstract class SignInLauncherState {}
+abstract class SignOutLauncherState {}
 

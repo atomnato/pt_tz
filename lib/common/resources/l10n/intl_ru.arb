@@ -12,5 +12,7 @@
   "continueReq": "Продолжить",
   "newPassword": "Новый пароль",
   "replyPassword": "Повторите пароль",
-  "welcomeMessage": "Вы успешщно авторизовались"
+  "welcomeMessage": "Вы успешно авторизовались",
+  "helperPassword": "Пароль должен содержать не менее 6 символов"
+
 }

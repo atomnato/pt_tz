@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pt_tz/resources/resources.dart';
+import 'package:pt_tz/common/resources/assets/resources.dart';
 
 void main() {
   test('images assets test', () {

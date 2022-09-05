@@ -39,6 +39,11 @@ class AppStyles extends InheritedWidget {
         fontWeight: FontWeight.w600,
         fontSize: 13.sp,
       );
+  TextStyle get regularCaption =>
+      TextStyle(
+        fontWeight: FontWeight.w300,
+        fontSize: 13.sp,
+      );
   TextStyle get regularSubHeadline =>
       TextStyle(
         fontWeight: FontWeight.w300,

@@ -9,47 +9,81 @@ part 'launcher_bloc.freezed.dart';
 class LauncherEvent with _$LauncherEvent {
   const LauncherEvent._();
 
-  const factory LauncherEvent.login({
+  const factory LauncherEvent.singIn({
     User? user,
-  }) = LoginLauncherEvent;
+  }) = SignInLauncherEvent;
+
+  const factory LauncherEvent.signOut({
+    User? user,
+  }) = SignOutLauncherEvent;
 }
 
 @freezed
 class LauncherState with _$LauncherState {
   const factory LauncherState.initial() = InitialLauncherState;
 
-  @Implements<LoginLauncherState>()
+  @Implements<SignInLauncherState>()
   @Implements<PendingLauncherState>()
   const factory LauncherState.authenticatePending() =
       PendingAuthenticateLauncherState;
 
-  @Implements<LoginLauncherState>()
+  @Implements<SignInLauncherState>()
   @Implements<SuccessLauncherState>()
   const factory LauncherState.authenticateSuccess() =
       SuccessAuthenticateLauncherState;
 
-  @Implements<LoginLauncherState>()
+  @Implements<SignInLauncherState>()
   @Implements<FailureLauncherState>()
   const factory LauncherState.authenticateFailure({required Type typeError}) =
       FailureAuthenticateLauncherState;
+
+  @Implements<SignOutLauncherState>()
+  @Implements<PendingLauncherState>()
+  const factory LauncherState.logoutPending() =
+  PendingLogoutLauncherState;
+
+  @Implements<SignOutLauncherState>()
+  @Implements<SuccessLauncherState>()
+  const factory LauncherState.logoutSuccess() =
+  SuccessLogoutLauncherState;
+
+  @Implements<SignOutLauncherState>()
+  @Implements<FailureLauncherState>()
+  const factory LauncherState.logoutFailure({required Type typeError}) =
+  FailureLogoutLauncherState;
 
   const LauncherState._();
 }
 
 class LauncherBloc extends Bloc<LauncherEvent, LauncherState> {
-  LauncherBloc() : super(const LauncherState.initial()) {
-    on<LoginLauncherEvent>(_login);
+  LauncherBloc(this._auth) : super(const LauncherState.initial()) {
+    on<SignInLauncherEvent>(_signIn);
+    on<SignOutLauncherEvent>(_signOut);
   }
+  final FirebaseAuth _auth;
 
-  Future<void> _login(
-    LoginLauncherEvent event,
+  Future<void> _signIn(
+    SignInLauncherEvent event,
     Emitter<LauncherState> emit,
   ) async {
-    emit(const PendingAuthenticateLauncherState());
+    emit(const LauncherState.authenticatePending());
     if(event.user != null){
-      emit(const SuccessAuthenticateLauncherState());
+      emit(const LauncherState.authenticateSuccess());
     }else{
-      emit(const FailureAuthenticateLauncherState(typeError: Object));
+      emit(const LauncherState.authenticateFailure(typeError: Object));
+    }
+  }
+
+  Future<void> _signOut(
+      SignOutLauncherEvent event,
+      Emitter<LauncherState> emit,
+      ) async {
+    emit(const LauncherState.logoutPending());
+    try {
+      await _auth.signOut();
+      emit(const LauncherState.logoutSuccess());
+    } on Exception catch (e) {
+      emit(const LauncherState.logoutFailure(typeError: Object));
     }
   }
 }
